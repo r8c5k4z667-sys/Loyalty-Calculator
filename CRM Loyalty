@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loyalty & Referral Privilege Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+      color: #222;
+    }
+    .container {
+      max-width: 500px;
+      margin: 20px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .header {
+      background-color: #0b2545;
+      color: #ffffff;
+      padding: 25px 20px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+    }
+    .header p {
+      margin: 8px 0 0;
+      font-size: 14px;
+      color: #d4af37;
+    }
+    .badge {
+      display: inline-block;
+      background-color: rgba(212, 175, 55, 0.2);
+      color: #f3d266;
+      border: 1px solid #d4af37;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+    .content {
+      padding: 25px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #333;
+    }
+    select, input[type="range"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+    .slider-value {
+      font-size: 20px;
+      font-weight: bold;
+      color: #0b2545;
+      text-align: right;
+      margin-top: 5px;
+    }
+    .result-box {
+      background-color: #f8f9fa;
+      border-left: 4px solid #d4af37;
+      padding: 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+    }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+    .result-row.total {
+      border-top: 1px solid #ddd;
+      padding-top: 12px;
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 18px;
+      color: #0b2545;
+    }
+    .highlight-note {
+      font-size: 12px;
+      color: #1b6ca8;
+      background: #eef6fc;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin-top: 12px;
+      font-weight: 500;
+    }
+    .whatsapp-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background-color: #25D366;
+      color: white;
+      font-weight: bold;
+      padding: 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-top: 22px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .whatsapp-btn:hover {
+      background-color: #1ebe5d;
+    }
+    .disclaimer {
+      font-size: 11px;
+      color: #777;
+      margin-top: 15px;
+      text-align: center;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Homeowner Loyalty Privileges</h1>
+    <p>Exclusive Rewards for Our Valued Residents</p>
+    <div class="badge">Over & Above All Site Discounts</div>
+  </div>
+
+  <div class="content">
+    <div class="form-group">
+      <label for="projectSelect">Select Project of Interest:</label>
+      <select id="projectSelect" onchange="calculateReward()">
+        <option value="Joyville (Mumbai / Pune / NCR)">Joyville Projects</option>
+        <option value="Luxury & Premium Residences">Luxury & Premium Residences</option>
+        <option value="Upcoming Pre-Launch">Upcoming Exclusive Pre-Launch</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="buyerType">Select Privilege Type:</label>
+      <select id="buyerType" onchange="calculateReward()">
+        <option value="referral">Refer a Friend / Family (1% + 1% Benefit)</option>
+        <option value="repeat">Self-Purchase / 2nd Home (Flat 2% Benefit)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="propertyValue">Estimated Agreement Value (in Crores):</label>
+      <input type="range" id="propertyValue" min="0.75" max="15" step="0.25" value="2.0" oninput="calculateReward()">
+      <div class="slider-value" id="valueDisplay">₹ 2.00 Cr</div>
+    </div>
+
+    <div class="result-box">
+      <div class="result-row" id="referrerRow">
+        <span>Your Referral Reward (1.0%):</span>
+        <span id="referrerBenefit">₹ 2,00,000</span>
+      </div>
+      <div class="result-row" id="refereeRow">
+        <span>Friend's Welcome Discount (1.0%):</span>
+        <span id="refereeBenefit">₹ 2,00,000</span>
+      </div>
+      <div class="result-row" id="selfRow" style="display: none;">
+        <span>Your Loyalty Benefit (2.0%):</span>
+        <span id="selfBenefit">₹ 4,00,000</span>
+      </div>
+      <div class="result-row total">
+        <span>Total Privilege Value:</span>
+        <span id="totalBenefit">₹ 4,00,000</span>
+      </div>
+      <div class="highlight-note">
+        ✓ Applicable on Agreement Value, over & above all ongoing site offers.
+      </div>
+    </div>
+
+    <a href="#" id="whatsappLink" target="_blank" class="whatsapp-btn">
+      Register & Claim via WhatsApp
+    </a>
+
+    <p class="disclaimer">
+      *Benefits are calculated on the Agreement Value and are over and above prevailing site discounts. Subject to verification of existing homeowner credentials and booking milestones.
+    </p>
+  </div>
+</div>
+
+<script>
+  function formatINR(amount) {
+    return '₹ ' + amount.toLocaleString('en-IN');
+  }
+
+  function calculateReward() {
+    const project = document.getElementById('projectSelect').value;
+    const type = document.getElementById('buyerType').value;
+    const crores = parseFloat(document.getElementById('propertyValue').value);
+    const agreementValue = crores * 10000000;
+
+    document.getElementById('valueDisplay').innerText = '₹ ' + crores.toFixed(2) + ' Cr';
+
+    let totalValue = 0;
+
+    if (type === 'referral') {
+      // 1% to Referrer + 1% to Referee
+      const onePercent = Math.round(agreementValue * 0.01);
+      totalValue = onePercent * 2;
+
+      document.getElementById('referrerRow').style.display = 'flex';
+      document.getElementById('refereeRow').style.display = 'flex';
+      document.getElementById('selfRow').style.display = 'none';
+
+      document.getElementById('referrerBenefit').innerText = formatINR(onePercent);
+      document.getElementById('refereeBenefit').innerText = formatINR(onePercent);
+    } else {
+      // 2% on Self-Purchase
+      totalValue = Math.round(agreementValue * 0.02);
+
+      document.getElementById('referrerRow').style.display = 'none';
+      document.getElementById('refereeRow').style.display = 'none';
+      document.getElementById('selfRow').style.display = 'flex';
+
+      document.getElementById('selfBenefit').innerText = formatINR(totalValue);
+    }
+
+    document.getElementById('totalBenefit').innerText = formatINR(totalValue);
+
+    // Loyalty Desk WhatsApp Number
+    const phone = '917506217008';
+    const modeText = (type === 'referral') 
+      ? 'refer a friend (1% + 1% Privilege)' 
+      : 'enquire about a Self-Purchase (2% Loyalty Privilege)';
+      
+    const message = encodeURIComponent(
+      `Hello Loyalty Team, I am an existing homeowner interested to ${modeText} for *${project}* around ₹${crores.toFixed(2)} Cr (Total Privilege: ${formatINR(totalValue)}). Please connect with me.`
+    );
+    
+    document.getElementById('whatsappLink').href = `https://wa.me{phone}?text=${message}`;
+  }
+
+  calculateReward();
+</script>
+
+</body>
+</html>
